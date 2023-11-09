@@ -1,0 +1,69 @@
+Given the following input object with various data types and potential null values, create Jest tests that validate the structure and data type of each field using the most suitable matcher. When a field can contain a value or null, use our custom matchers defined in `customMatchers.js`. For non-null values, use Jest's built-in matchers to ensure robustness.
+
+Input Object:
+{
+  "list1": [
+    {"foo": "bar"},
+    {"foo": null}
+  ],
+  "list2": [
+    {"foo": 42},
+    {"foo": null}
+  ],
+  "list3": [
+    [1,2,3],
+    null
+  ],
+  "a": 42,
+  "b": "42",
+  "c": []
+}
+
+Required Test Cases:
+1. `list1` should be an array of objects where `foo` is either a string or null.
+2. `list2` should be an array of objects where `foo` is either a number or null.
+3. `list3` should be an array where elements are either arrays of numbers or null.
+4. `a` should be a number.
+5. `b` should be a string.
+6. `c` should be an array.
+
+Custom Matchers (`customMatchers.js`):
+- toBeNullOrString
+- toBeNullOrArray
+- toBeNullOrNumber
+- toBeNullOrAnything
+
+Instructions:
+- For each field, write a Jest `expect` statement that checks for the correct structure and type.
+- Use `expect.arrayContaining` and `expect.objectContaining` where needed to allow for array and object flexibility.
+- When a field's value can be `null`, use the appropriate `toBeNullOrX` matcher from `customMatchers.js`.
+- For fields with non-nullable values, use the built-in Jest matchers like `expect.any(Number)`, `expect.any(String)`, and `expect.any(Array)`.
+
+Ensure that the tests are maintainable and check for both the presence and type of the values without being overly rigid to allow for future expansion of the tested objects.
+Based on this prompt, here's how the Jest test output should look like:
+
+// javascript
+expect(response.body).toEqual({
+  list1: expect.arrayContaining([
+    expect.objectContaining({
+        foo: expect.toBeNullOrString()
+    })
+  ]),
+  list2: expect.arrayContaining([
+    expect.objectContaining({
+        foo: expect.toBeNullOrNumber()
+    })
+  ]),
+  list3: expect.arrayContaining([
+    expect.toBeNullOrArray()
+  ]),
+  a: expect.any(Number),
+  b: expect.any(String),
+  c: expect.any(Array)
+});
+
+- Always assume that all dependencies are already installed and properly imported
+- Only respond in the context of "expect(response.body).toEqual({", nothing beyond that context is needed
+
+Apply the above logic with the following object:
+${inputObject}
